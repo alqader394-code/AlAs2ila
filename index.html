@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#123d66">
+<title>الأسئلة</title>
+<style>
+:root{--navy:#123d66;--blue:#1769aa;--bg:#f2f6fb;--line:#dce5ef;--ink:#172b40;--green:#16845b}
+*{box-sizing:border-box}body{margin:0;font-family:Tahoma,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+header{background:linear-gradient(125deg,#102f50,#1769aa);color:white;padding:24px 16px}
+header h1{margin:0;font-size:28px}header p{margin:7px 0 0;opacity:.9}
+main{max-width:1050px;margin:18px auto;padding:0 12px}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+button{border:0;border-radius:9px;padding:11px 14px;background:#e5edf5;color:#123d66;font-weight:bold;cursor:pointer}
+button.primary,.tab.active{background:var(--blue);color:white}button.good{background:#d9f5e8;color:#126342}button.danger{background:#fee2e2;color:#991b1b}
+.panel{background:white;border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px;box-shadow:0 3px 12px #16324d0b}
+h2{font-size:19px;color:var(--navy);margin:0 0 14px}h3{font-size:16px;margin:14px 0 8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}
+label{display:block;font-size:13px;font-weight:bold;margin:8px 0 5px}
+input,select,textarea{width:100%;padding:11px;border:1px solid #cbd5e1;border-radius:8px;font:inherit;background:white}
+textarea{min-height:75px;resize:vertical}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.small{font-size:12px;color:#64748b}.muted{color:#64748b}.hidden{display:none!important}
+.item{border:1px solid var(--line);border-radius:10px;padding:12px;margin:9px 0}
+.item p{margin:7px 0;white-space:pre-wrap}.itemhead{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.pill{display:inline-block;background:#eaf2fa;color:#24577f;border-radius:20px;padding:4px 9px;font-size:11px;margin:2px}
+.filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;margin:12px 0}
+.option{display:flex;gap:8px;align-items:flex-start;border:1px solid var(--line);border-radius:9px;padding:10px;margin:7px 0;font-weight:normal}
+.option input{width:auto;margin-top:3px}
+#examPaper{background:white;color:#111;padding:24px;border:1px solid #cbd5e1}
+.paperHead{text-align:center;border-bottom:2px solid #222;padding-bottom:12px;margin-bottom:15px}
+.paperMeta{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:12px 0}
+.q{margin:17px 0;break-inside:avoid}.answerline{border-bottom:1px dotted #777;height:28px;margin-top:8px}
+.score{font-size:22px;color:var(--green);font-weight:bold}
+footer{text-align:center;color:#64748b;font-size:12px;padding:20px}
+@media print{body{background:white}header,nav,.no-print,footer{display:none!important}main{max-width:none;margin:0;padding:0}.panel{border:0;box-shadow:none;padding:0}#examPaper{border:0;padding:0}.q{break-inside:avoid}}
+</style></head>
+<body>
+<header><h1>📚 الأسئلة</h1><p>منصة إعداد الأسئلة والاختبارات المدرسية — تعمل محلياً على جهازك</p></header>
+<main>
+<nav class="no-print">
+<button class="tab active" data-tab="builder">إضافة سؤال</button>
+<button class="tab" data-tab="bank">بنك الأسئلة</button>
+<button class="tab" data-tab="exam">إنشاء ورقة</button>
+<button class="tab" data-tab="quiz">اختبار إلكتروني</button>
+</nav>
+
+<section id="builder" class="panel">
+<h2 id="formTitle">إضافة سؤال جديد</h2>
+<div class="grid">
+<div><label>المادة</label><input id="subject" placeholder="مثال: اللغة الإنجليزية"></div>
+<div><label>الصف / المرحلة</label><input id="grade" placeholder="مثال: الأول المتوسط"></div>
+<div><label>نوع السؤال</label><select id="type"><option>اختيار من متعدد</option><option>صح أو خطأ</option><option>املأ الفراغ</option><option>تعريف</option><option>ترجمة</option><option>قواعد</option><option>سؤال مقالي</option></select></div>
+<div><label>الدرجة</label><input id="mark" type="number" min="0.5" step="0.5" value="5"></div>
+</div>
+<label>نص السؤال</label><textarea id="question" placeholder="اكتب نص السؤال..."></textarea>
+<h3>الخيارات (للاختيار من متعدد أو صح/خطأ)</h3>
+<div class="grid"><input id="c1" placeholder="الخيار الأول"><input id="c2" placeholder="الخيار الثاني"><input id="c3" placeholder="الخيار الثالث"><input id="c4" placeholder="الخيار الرابع"></div>
+<label>الإجابة الصحيحة / النموذجية</label><input id="answer" placeholder="اكتب الإجابة الصحيحة كما هي">
+<p class="small">للاختبار الإلكتروني، اكتب الإجابة الصحيحة أو اجعلها مطابقة لأحد الخيارات.</p>
+<div class="actions"><button class="primary" id="saveQuestion">حفظ السؤال</button><button id="clearForm">تفريغ الحقول</button><button class="danger hidden" id="cancelEdit">إلغاء التعديل</button></div>
+</section>
+
+<section id="bank" class="panel hidden">
+<div class="itemhead"><h2>بنك الأسئلة</h2><span class="pill" id="countLabel">0 سؤال</span></div>
+<div class="filters">
+<input id="search" placeholder="ابحث في نص السؤال...">
+<input id="filterSubject" placeholder="تصفية حسب المادة">
+<input id="filterGrade" placeholder="تصفية حسب الصف">
+</div>
+<div class="actions no-print"><button id="exportData">تصدير نسخة احتياطية</button><button id="importBtn">استيراد نسخة</button><input class="hidden" type="file" id="importFile" accept="application/json"><button class="danger" id="deleteAll">حذف جميع الأسئلة</button></div>
+<div id="questionList"></div>
+</section>
+
+<section id="exam" class="panel hidden">
+<h2>إنشاء ورقة امتحانية</h2>
+<div class="grid">
+<div><label>اسم المدرسة</label><input id="school" placeholder="اسم المدرسة"></div>
+<div><label>اسم المدرس</label><input id="teacher" placeholder="اسم المدرس"></div>
+<div><label>المادة</label><input id="examSubject" placeholder="المادة"></div>
+<div><label>الصف</label><input id="examGrade" placeholder="الصف"></div>
+<div><label>التاريخ</label><input id="examDate" type="date"></div>
+<div><label>مدة الامتحان</label><input id="duration" placeholder="مثال: ساعة"></div>
+</div>
+<label>عنوان الامتحان</label><input id="examTitle" value="الامتحان الشهري">
+<div class="filters"><input id="examFilterSubject" placeholder="تصفية الأسئلة حسب المادة"><input id="examFilterGrade" placeholder="تصفية الأسئلة حسب الصف"></div>
+<div class="actions"><button id="selectAll">تحديد الكل</button><button id="selectNone">إلغاء التحديد</button></div>
+<div id="selectQuestions" class="small">أضف أسئلة أولاً.</div>
+<div class="actions no-print"><button class="primary" id="makeExam">إنشاء ورقة الامتحان</button><button id="printExam">طباعة / حفظ PDF</button></div>
+<div id="examPaper" class="hidden" style="margin-top:18px">
+<div class="paperHead"><h2 id="pSchool"></h2><h3 id="pTitle"></h3></div>
+<div class="paperMeta"><span id="pSubject"></span><span id="pGrade"></span><span id="pDate"></span></div>
+<div class="paperMeta"><span id="pTeacher"></span><span id="pDuration"></span><span id="pTotal"></span></div>
+<div id="paperQuestions"></div>
+</div>
+</section>
+
+<section id="quiz" class="panel hidden">
+<h2>اختبار إلكتروني</h2>
+<div class="grid">
+<div><label>المادة (اختياري)</label><input id="quizSubject" placeholder="اتركه فارغاً لكل المواد"></div>
+<div><label>الصف (اختياري)</label><input id="quizGrade" placeholder="مثال: الأول المتوسط"></div>
+<div><label>عدد الأسئلة</label><input id="quizCount" type="number" min="1" value="10"></div>
+</div>
+<div class="actions"><button class="primary" id="startQuiz">ابدأ اختباراً عشوائياً</button></div>
+<div id="quizArea" class="hidden"></div>
+</section>
+</main>
+<footer>الأسئلة — نسخة مطوّرة أولية · احتفظ بنسخة احتياطية من بنك الأسئلة بانتظام</footer>
+<script>
+const $=id=>document.getElementById(id);
+const KEY='exam_questions_v1';
+let questions=[];try{questions=JSON.parse(localStorage.getItem(KEY)||'[]');if(!Array.isArray(questions))questions=[];}catch{questions=[];}
+let selected=new Set(),editingId=null,quizItems=[],quizAnswers={};
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const save=()=>{localStorage.setItem(KEY,JSON.stringify(questions));renderAll();};
+const val=id=>$(id).value.trim();
+function clearForm(){['subject','grade','question','answer','c1','c2','c3','c4'].forEach(x=>$(x).value='');$('type').value='اختيار من متعدد';$('mark').value=5;editingId=null;$('formTitle').textContent='إضافة سؤال جديد';$('saveQuestion').textContent='حفظ السؤال';$('cancelEdit').classList.add('hidden');}
+$('clearForm').onclick=clearForm;$('cancelEdit').onclick=clearForm;
+$('saveQuestion').onclick=()=>{
+ const q=val('question');if(!q){alert('يرجى كتابة نص السؤال.');return;}
+ const item={id:editingId||Date.now(),subject:val('subject'),grade:val('grade'),type:val('type'),mark:Math.max(.5,Number($('mark').value)||5),question:q,choices:['c1','c2','c3','c4'].map(x=>val(x)).filter(Boolean),answer:val('answer')};
+ if(editingId){questions=questions.map(x=>x.id===editingId?item:x);}else questions.push(item);
+ save();clearForm();alert('تم حفظ السؤال بنجاح.');
+};
+function editQ(id){const q=questions.find(x=>x.id===id);if(!q)return;editingId=id;
+ $('subject').value=q.subject||'';$('grade').value=q.grade||'';$('type').value=q.type||'اختيار من متعدد';$('mark').value=q.mark||5;$('question').value=q.question||'';$('answer').value=q.answer||'';
+ ['c1','c2','c3','c4'].forEach((x,i)=>$(x).value=q.choices?.[i]||'');
+ $('formTitle').textContent='تعديل السؤال';$('saveQuestion').textContent='حفظ التعديلات';$('cancelEdit').classList.remove('hidden');showTab('builder');window.scrollTo({top:0,behavior:'smooth'});
+}
+function removeQ(id){if(!confirm('هل تريد حذف هذا السؤال؟'))return;questions=questions.filter(q=>q.id!==id);selected.delete(id);save();}
+function filtered(list,subject,grade,search=''){return list.filter(q=>(!subject||String(q.subject||'').includes(subject))&&(!grade||String(q.grade||'').includes(grade))&&(!search||String(q.question||'').includes(search)));}
+function renderBank(){
+ const list=filtered(questions,val('filterSubject'),val('filterGrade'),val('search'));
+ $('countLabel').textContent=questions.length+' سؤال';
+ $('questionList').innerHTML=list.length?list.map((q,i)=>`<div class="item"><div class="itemhead"><b>${i+1}. ${esc(q.type)} — ${esc(q.subject||'بدون مادة')}</b><span class="pill">${esc(q.grade||'دون صف')} · ${q.mark} درجة</span></div><p>${esc(q.question)}</p><div class="small">الإجابة: ${esc(q.answer||'غير محددة')}</div><div class="actions no-print"><button onclick="editQ(${q.id})">تعديل</button><button class="danger" onclick="removeQ(${q.id})">حذف</button></div></div>`).join(''):'<p class="muted">لا توجد أسئلة مطابقة.</p>';
+}
+['search','filterSubject','filterGrade'].forEach(id=>$(id).addEventListener('input',renderBank));
+function renderSelect(){
+ const list=filtered(questions,val('examFilterSubject'),val('examFilterGrade'));
+ $('selectQuestions').innerHTML=list.length?list.map(q=>`<label class="option"><input type="checkbox" data-id="${q.id}" ${selected.has(q.id)?'checked':''}><span>${esc(q.question)} <span class="small">(${esc(q.subject||'')} · ${q.mark} درجة)</span></span></label>`).join(''):'لا توجد أسئلة مطابقة.';
+ $('selectQuestions').querySelectorAll('input').forEach(c=>c.onchange=()=>{const id=Number(c.dataset.id);c.checked?selected.add(id):selected.delete(id);});
+}
+$('examFilterSubject').oninput=renderSelect;$('examFilterGrade').oninput=renderSelect;
+$('selectAll').onclick=()=>{filtered(questions,val('examFilterSubject'),val('examFilterGrade')).forEach(q=>selected.add(q.id));renderSelect();};
+$('selectNone').onclick=()=>{selected.clear();renderSelect();};
+$('makeExam').onclick=()=>{
+ const chosen=questions.filter(q=>selected.has(q.id));if(!chosen.length){alert('حدد سؤالاً واحداً على الأقل.');return;}
+ $('pSchool').textContent=val('school')||'اسم المدرسة';$('pTitle').textContent=val('examTitle')||'الامتحان';$('pSubject').textContent='المادة: '+val('examSubject');$('pGrade').textContent='الصف: '+val('examGrade');$('pDate').textContent='التاريخ: '+val('examDate');$('pTeacher').textContent='المدرس: '+val('teacher');$('pDuration').textContent='المدة: '+val('duration');$('pTotal').textContent='الدرجة الكلية: '+chosen.reduce((s,q)=>s+Number(q.mark||0),0);
+ $('paperQuestions').innerHTML=chosen.map((q,i)=>`<div class="q"><b>${i+1}. (${q.mark} درجات) ${esc(q.question)}</b>${q.choices?.length?'<p>'+q.choices.map((c,j)=>`(${['أ','ب','ج','د'][j]||j+1}) ${esc(c)}`).join('　　')+'</p>':''}<div class="answerline"></div></div>`).join('');
+ $('examPaper').classList.remove('hidden');$('examPaper').scrollIntoView({behavior:'smooth'});
+};
+$('printExam').onclick=()=>{if($('examPaper').classList.contains('hidden'))return alert('أنشئ ورقة الامتحان أولاً.');window.print();};
+$('startQuiz').onclick=()=>{
+ const pool=filtered(questions,val('quizSubject'),val('quizGrade'));
+ if(!pool.length)return alert('لا توجد أسئلة مطابقة. أضف الإجابات الصحيحة إلى بنك الأسئلة أولاً.');
+ const n=Math.max(1,Math.min(Number($('quizCount').value)||10,pool.length));
+ quizItems=[...pool].sort(()=>Math.random()-.5).slice(0,n);quizAnswers={};
+ $('quizArea').classList.remove('hidden');
+ $('quizArea').innerHTML=quizItems.map((q,i)=>`<div class="item"><b>${i+1}. ${esc(q.question)} <span class="pill">${q.mark} درجة</span></b>${q.choices?.length?q.choices.map(c=>`<label class="option"><input type="radio" name="quiz${i}" value="${esc(c)}"> ${esc(c)}</label>`).join(''):`<label>إجابتك</label><input id="qa${i}" placeholder="اكتب إجابتك هنا">`}</div>`).join('')+'<div class="actions"><button class="primary" id="submitQuiz">إنهاء الاختبار وتصحيح الإجابات</button></div><div id="quizResult"></div>';
+ $('submitQuiz').onclick=gradeQuiz;
+};
+function gradeQuiz(){
+ let earned=0,total=0,review='';
+ quizItems.forEach((q,i)=>{const mark=Number(q.mark)||0;total+=mark;let answer='';
+ if(q.choices?.length){answer=document.querySelector(`input[name="quiz${i}"]:checked`)?.value||'';}else{answer=$('qa'+i)?.value.trim()||'';}
+ const correct=String(q.answer||'').trim();const ok=!!correct&&answer.toLowerCase()===correct.toLowerCase();
+ if(ok)earned+=mark;
+ review+=`<div class="item"><b>${i+1}. ${ok?'✔ إجابة صحيحة':'✘ إجابة غير صحيحة'}</b><p>الإجابة النموذجية: ${esc(correct||'لم يحدد المدرس إجابة')}</p></div>`;
+ });
+ $('quizResult').innerHTML=`<div class="panel"><div class="score">النتيجة: ${earned} من ${total}</div><p>عدد الأسئلة: ${quizItems.length}</p>${review}</div>`;
+}
+$('exportData').onclick=()=>{const blob=new Blob([JSON.stringify(questions,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='نسخة-احتياطية-الأسئلة.json';a.click();URL.revokeObjectURL(a.href);};
+$('importBtn').onclick=()=>$('importFile').click();
+$('importFile').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const data=JSON.parse(await f.text());if(!Array.isArray(data))throw 0;questions=data;save();alert('تم استيراد الأسئلة.');}catch{alert('تعذر قراءة الملف.');}e.target.value='';};
+$('deleteAll').onclick=()=>{if(confirm('هل تريد حذف جميع الأسئلة نهائياً؟')){questions=[];selected.clear();save();}};
+function showTab(id){document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===id));['builder','bank','exam','quiz'].forEach(x=>$(x).classList.toggle('hidden',x!==id));if(id==='bank')renderBank();if(id==='exam')renderSelect();}
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
+function renderAll(){renderBank();renderSelect();}
+renderAll();
+</script></body></html>
